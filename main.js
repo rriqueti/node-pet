@@ -1,20 +1,22 @@
-const checkEmail = require('./routes/checkEmail');
-const register_interested = require('./routes/InterestedRoutes/createInterested');
 const express = require('express');
-// const bodyParser = require('body-parser')
-const crud = require('./routes/crud');
 const app = express();
+const routes = require('./routes/main');
 const port = 3000;
 
-// const session = require('cookie-session');
 
 
+//config engine
 app.set('view engine', 'ejs');
 app.set('views', './views');
 
-app.use('/crud', crud);
-app.use('/', checkEmail);
-app.use('/register', register_interested);
+// const register_interested = require('./routes/createInterested');
+// const checkEmail = require('./routes/checkEmail');
+
+
+app.use(routes);
+
+// app.use('/', checkEmail);
+// app.use('/register', register_interested);
 
 
 
