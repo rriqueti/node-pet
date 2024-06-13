@@ -4,7 +4,9 @@ const checkAuth = require('../utils/checkAuth')
 const router = express.Router();
 
 
-let listaUsuarios = [];
+let listaUsuarios = [{
+    
+}];
 
 
 router.use(bodyParser.urlencoded({ extended: true }));
@@ -14,10 +16,12 @@ router.get('/pet', (req, res) => {
     res.status(200).render('../views/Private/petList.ejs', {data: listaUsuarios});
     });
 
-router.post('/', checkAuth,(req, res)=>{
-    // let data = req.body;
+router.post('/pet', (req, res)=>{
+    let data = req.body;
 
-    // res.send(req.body)
+    listaUsuarios.push(data);
+    console.log(listaUsuarios);
+    res.render('../views/Private/petList.ejs',  {data: listaUsuarios});
 });
 
 //Interested routes
