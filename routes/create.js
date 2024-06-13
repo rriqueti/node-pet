@@ -4,10 +4,11 @@ const checkAuth = require('../utils/checkAuth')
 const router = express.Router();
 
 
-let listaUsuarios = [{
-    
-}];
+let listaUsuarios = [];
 
+function isValid(data){
+    //
+}
 
 router.use(bodyParser.urlencoded({ extended: true }));
 
@@ -20,8 +21,10 @@ router.post('/pet', (req, res)=>{
     let data = req.body;
 
     listaUsuarios.push(data);
+
     console.log(listaUsuarios);
-    res.render('../views/Private/petList.ejs',  {data: listaUsuarios});
+
+    // res.render('../views/Private/petList.ejs',  {data: listaUsuarios});
 });
 
 //Interested routes
