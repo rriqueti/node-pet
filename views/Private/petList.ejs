@@ -157,7 +157,7 @@
     </div>
     <center><h2>Cadastrar novo PET</h2>
     <div class="table-container">
-        
+        <form method="post">
         <div class="add-container">
             <label for="name">Nome:</label>
             <input type="text" id="name" name="name" placeholder="Nome do Animal">
@@ -168,8 +168,9 @@
             <label for="description">Características do Animal:</label>
             <textarea id="description" name="description" rows="4" placeholder="Características do Animal"></textarea>
     
-            <button type="button" onclick="addData()">Adicionar</button>
+            <button type="submit" onclick="addData()">Adicionar</button>
         </div>
+    </form>
     </div>
     <div class="container">
         
@@ -191,9 +192,9 @@
                 <tbody>
                     <!-- <% data.forEach(function(pets) { %> -->
                         <tr class="table-row">
-                            <td><%= pets.nome %></td>
-                            <td><%= pets.idade %></td>
-                            <td><%= pets.descricao %></td>
+                            <td><%= pets.name %></td>
+                            <td><%= pets.age %></td>
+                            <td><%= pets.description %></td>
                         </tr>
                     <!-- <% }); %> -->
                 </tbody>
