@@ -46,11 +46,12 @@
         }
         .filters {
             display: flex;
-            justify-content: space-between;
+            align-items: center; 
+            /* justify-content: space-between; */
             margin-bottom: 20px;
         }
         .filters input {
-            flex: 1;
+            /* flex: 1; */
             margin-right: 10px;
             padding: 10px;
             border: 1px solid #dddfe2;
@@ -69,10 +70,18 @@
             max-width: 1000px;
             margin: 20px auto;
         }
+        table{
+            width: 100%;
+        }
+        th{
+            width: 30%;
+        }
         .table-row {
             display: flex;
             justify-content: space-between;
+            text-align: center;
             padding: 10px 0;
+            width: 100%;
             border-bottom: 1px solid #dddfe2;
         }
         .table-row.header {
@@ -92,6 +101,49 @@
             color: #1877f2;
             font-size: 18px;
         }
+        .add-container {
+            background-color: #f0f2f5;
+            border: 1px solid #dddfe2;
+            border-radius: 8px;
+            padding: 20px;
+            /* width: 80%; */
+            /* margin: 20px auto; */
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .add-container label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+
+        .add-container input[type="text"],
+        .add-container input[type="number"],
+        .add-container textarea {
+            width: calc(100% - 22px);
+            padding: 8px;
+            border: 1px solid #dddfe2;
+            border-radius: 5px;
+            margin-bottom: 15px;
+        }
+
+        .add-container textarea {
+            resize: vertical;
+        }
+
+        .add-container button {
+            background-color: #1877f2;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .add-container button:hover {
+            background-color: #0e63ac;
+        }
     </style>
 </head>
 <body>
@@ -103,57 +155,58 @@
             <li><a href="#">Contato</a></li>
         </ul>
     </div>
-    <div class="container">
-        <div class="filters">
-           
-            <center><label for="research">Pesquisar</label>
-            <input type="text" id="filter-col1" placeholder="Filtrar Coluna 1">
-
+    <center><h2>Cadastrar novo PET</h2>
+    <div class="table-container">
+        
+        <div class="add-container">
+            <label for="name">Nome:</label>
+            <input type="text" id="name" name="name" placeholder="Nome do Animal">
+    
+            <label for="age">Idade (Meses):</label>
+            <input type="number" id="age" name="age" placeholder="Idade do animal">
+    
+            <label for="description">Características do Animal:</label>
+            <textarea id="description" name="description" rows="4" placeholder="Características do Animal"></textarea>
+    
+            <button type="button" onclick="addData()">Adicionar</button>
         </div>
+    </div>
+    <div class="container">
+        
         <div class="table-container">
-            <div class="table-row header">
-                <div class="table-cell"></div>
-                <div class="table-cell">Coluna 1</div>
-                <div class="table-cell">Coluna 2</div>
-                <div class="table-cell">Coluna 3</div>
-                <div class="table-cell">Coluna 4</div>
-                <div class="table-cell">Coluna 5</div>
+            <div class="filters">
+           
+                <center><label for="research">Pesquisar</label>
+                <input type="text" id="filter-col1" placeholder="Filtrar Coluna 1">
+    
             </div>
-            <div class="table-row">
-                <div class="table-cell"><span class="plus-icon">+</span></div>
-                <div class="table-cell">Dado 1</div>
-                <div class="table-cell">Dado 2</div>
-                <div class="table-cell">Dado 3</div>
-                <div class="table-cell">Dado 4</div>
-                <div class="table-cell">Dado 5</div>
-            </div>
-            <div class="table-row">
-                <div class="table-cell"><span class="plus-icon">+</span></div>
-                <div class="table-cell">Dado 6</div>
-                <div class="table-cell">Dado 7</div>
-                <div class="table-cell">Dado 8</div>
-                <div class="table-cell">Dado 9</div>
-                <div class="table-cell">Dado 10</div>
-            </div>
-            <div class="table-row">
-                <div class="table-cell"><span class="plus-icon">+</span></div>
-                <div class="table-cell">Dado 11</div>
-                <div class="table-cell">Dado 12</div>
-                <div class="table-cell">Dado 13</div>
-                <div class="table-cell">Dado 14</div>
-                <div class="table-cell">Dado 15</div>
-            </div>
+            <table>
+                <thead>
+                    <tr class="table-row header" id="table-row-header">
+                        <th>Nome</th> 
+                        <th>Idade (Meses)</th>
+                        <th>Descrição</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- <% data.forEach(function(pets) { %> -->
+                        <tr class="table-row">
+                            <td><%= pets.nome %></td>
+                            <td><%= pets.idade %></td>
+                            <td><%= pets.descricao %></td>
+                        </tr>
+                    <!-- <% }); %> -->
+                </tbody>
+            </table>
+
             <!-- Adicione mais linhas conforme necessário -->
         </div>
     </div>
+    
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const filters = [
                 document.getElementById('filter-col1'),
-                document.getElementById('filter-col2'),
-                document.getElementById('filter-col3'),
-                document.getElementById('filter-col4'),
-                document.getElementById('filter-col5')
             ];
 
             filters.forEach((filter, index) => {
@@ -169,12 +222,6 @@
                             row.style.display = 'none';
                         }
                     });
-                });
-            });
-
-            document.querySelectorAll('.plus-icon').forEach(icon => {
-                icon.addEventListener('click', function() {
-                    alert('Opção + clicada para esta linha');
                 });
             });
         });
