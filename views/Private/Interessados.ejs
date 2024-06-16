@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="pt-br">
 
@@ -93,7 +94,7 @@
             white-space: pre-wrap;
         }
 
-        td, tr {
+        td {
             text-align: center;
             width: 30%;
             word-wrap: break-word;
@@ -161,7 +162,7 @@
             resize: vertical;
         }
 
-        .add-container button {
+        button {
             background-color: #1877f2;
             color: white;
             border: none;
@@ -172,22 +173,13 @@
         }
 
         #btn-fechar {
-            display: inline-block;
-            padding: 10px 20px;
-            font-size: 14px;
-            font-weight: bold;
-            color: #1877f2; 
-            background-color: #ffffff; 
-            cursor: pointer;
-            text-align: center;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); 
-            transition: background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
+            background-color: white;
+            color: #1877f2;
         }
 
         .add-container button:hover {
             background-color: #0e63ac;
         }
-
         .modal {
             display: none;
             position: fixed;
@@ -216,125 +208,107 @@
         }
     </style>
 </head>
-
 <body>
-    <div class="navbar">
-        <h1>PetLovers</h1>
-        <ul>
-            <li><a href="/">Home</a></li>
-            <li><a href="/register/pet">Cadastrar Pet</a></li>
-            <li><a href="#">Lista de Interessados</a></li>
-        </ul>
+<div class="navbar">
+    <h1>PetLovers</h1>
+    <ul>
+        <li><a href="/">Home</a></li>
+        <li><a href="/register/pet">Cadastrar Pet</a></li>
+        <li><a href="/register/interessados">Lista de int</a></li>
+    </ul>
+</div>
+
+<div class="container">
+
+    <div class="table-container">
+        <h2>Cadastro de Interessados</h2>
+        <span class="modalBtn">[+ Interessado]</span>
+        <br><br>
+        <div class="filters">
+
+            <center><label for="research">Pesquisar</label>
+                <input type="text" id="filter-col1" placeholder="Filtrar Coluna 1">
+
+        </div>
+        <table>
+            <thead>
+                <tr class="table-row header" id="table-row-header">
+                    <th>Nome</th>
+                    <th>Telefone</th>
+                    <th>Email</th>
+                    <th>Nome Animal</th>
+                    <th>Ação</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% data.forEach(function(int) { %>
+                    <tr class="table-row">
+                        <td><%= int.name %></td>
+                        <td><%= int.fone %></td>
+                        <td><%= int.email %></td>
+                        <td><%= int.nome_animal %></td>
+                        <td >
+                        <form action="/register/delete/interessados/<%= int.id %>" method="post" onsubmit="return confirm('Tem certeza que deseja excluir?');">
+                            <button type="submit">Excluir Interessado</button></td>
+                        </form></td>
+                    </tr>
+                    <% }); %>
+            </tbody>
+        </table>
     </div>
-    <center>
-        <h2>Cadastrar novo PET</h2>
+</div>
+       <!-- modal HTML -->
+       <div class="modal">
         <div class="table-container">
-            <form method="post">
+            <label for="name"></label>
+            <form method="post" action="/register/interessados">
                 <div class="add-container">
+                    <input type="hidden" id="id_data" name="id_data">
+
                     <label for="name">Nome:</label>
-                    <input type="text" id="name" name="name" placeholder="Nome do Animal">
+                    <input type="text" id="name" name="name" placeholder="Nome do Interessado">
 
-                    <label for="age">Idade (Meses):</label>
-                    <input type="number" id="age" name="age" placeholder="Idade do animal">
+                    <label for="fone">Telefone:</label>
+                    <input type="number" id="fone" name="fone" placeholder="Telefone de Contato">
 
-                    <label for="description">Características do Animal:</label>
-                    <textarea id="description" name="description" rows="4"
-                        placeholder="Características do Animal"></textarea>
+                    <label for="email">Email:</label>
+                    <input type="text" id="email" name="email" placeholder="Email de contato">
 
                     <button type="submit">Adicionar</button>
+                    <span id="btn-fechar" onclick="switchModal()">Fechar</span>
                 </div>
             </form>
         </div>
-        <div class="container">
-
-            <div class="table-container">
-                <div class="filters">
-
-                    <center><label for="research">Pesquisar</label>
-                        <input type="text" id="filter-col1" placeholder="Filtrar Coluna 1">
-
-                </div>
-                <table>
-                    <thead>
-                        <tr class="table-row header" id="table-row-header">
-                            <th>Nome</th>
-                            <th>Idade (Meses)</th>
-                            <th>Descrição</th>
-                            <th>Adicionar Interessado</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <% data.forEach(function(pets) { %>
-                        <tr class="table-row">
-                            <td><%= pets.name %></td>
-                            <td><%= pets.age %> Meses</td>
-                            <td><%= pets.description %></td>
-                            <td><span class="modalBtn" id_data="<%= pets.id %>">[+ Interessado]</span>
-                            <form action="/register/delete/pet/<%= pets.id %>" method="post" onsubmit="return confirm('Tem certeza que deseja excluir este Pet?');">
-                                <button type="submit">Excluir pet</button></td>
-                            </form>
-                        </tr>
-                        <% }); %>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-        <!-- modal HTML -->
-        <div class="modal">
-            <div class="table-container">
-                <label for="name"></label>
-                <form method="post" action="/register/interessados">
-                    <div class="add-container">
-                        <input type="hidden" id="id_data" name="id_data">
-
-                        <label for="name">Nome:</label>
-                        <input type="text" id="name" name="name" placeholder="Nome do Interessado">
-
-                        <label for="fone">Telefone:</label>
-                        <input type="number" id="fone" name="fone" placeholder="Telefone de Contato">
-
-                        <label for="email">Email:</label>
-                        <input type="text" id="email" name="email" placeholder="Email de contato">
-
-                        <button type="submit">Adicionar</button>
-                        <span id="btn-fechar" onclick="switchModal()">Fechar</span>
-                    </div>
-                </form>
-            </div>
-        </div>
-        <!-- script modal -->
-        <script>
-            const switchModal = () => {
-                const modal = document.querySelector('.modal')
-                const actualStyle = modal.style.display
-                if (actualStyle === 'block') {
-                    modal.style.display = 'none'
-                } else {
-                    modal.style.display = 'block'
-                }
+    </div>
+    <!-- script modal -->
+    <script>
+        const switchModal = () => {
+            const modal = document.querySelector('.modal')
+            const actualStyle = modal.style.display
+            if (actualStyle === 'block') {
+                modal.style.display = 'none'
+            } else {
+                modal.style.display = 'block'
             }
+        }
 
 
-            document.querySelectorAll('.modalBtn').forEach(btn => {
-                btn.addEventListener('click', function () {
-                    const idData = this.getAttribute('id_data')
-                    document.getElementById('id_data').value = idData
-                    switchModal()
-                })
+        document.querySelectorAll('.modalBtn').forEach(btn => {
+            btn.addEventListener('click', function () {
+                const idData = this.getAttribute('id_data')
+                document.getElementById('id_data').value = idData
+                switchModal()
             })
+        })
 
-            window.onclick = function (event) {
-                const modal = document.querySelector('.modal')
-                if (event.target === modal) {
-                    switchModal()
-                }
+        window.onclick = function (event) {
+            const modal = document.querySelector('.modal')
+            if (event.target === modal) {
+                switchModal()
             }
-        </script>
+        }
+    </script>
 
-        <!-- Filtro Pesquisar -->
-        <script>
-
-        </script>
 </body>
 
 </html>
