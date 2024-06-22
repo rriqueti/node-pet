@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Chat</title>
+    <style>
+        /* styles.css */
+        /* styles.css */
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+
+        .navbar {
+            background-color: #d9534f;
+            color: white;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .navbar h1 {
+            margin: 0;
+            font-size: 24px;
+            flex-grow: 1;
+            text-align: center;
+        }
+
+        .navbar ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            gap: 15px;
+        }
+
+        .navbar ul li {
+            display: inline;
+        }
+
+        .navbar ul li a {
+            color: white;
+            text-decoration: none;
+            font-size: 16px;
+        }
+
+        .navbar ul li a:hover {
+            text-decoration: underline;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 5px;
+        }
+
+        h1 {
+            text-align: center;
+            color: white;
+        }
+
+        p {
+            text-align: center;
+            color: #555;
+        }
+
+        a.btn-logout {
+            display: inline-block;
+            padding: 5px 10px;
+            background-color: #d9534f;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 3px;
+            transition: background-color 0.3s;
+        }
+
+        a.btn-logout:hover {
+            background-color: #c9302c;
+        }
+
+        .messages {
+            margin: 20px 0;
+        }
+
+        .messages h2 {
+            margin-bottom: 15px;
+            color: #333;
+        }
+
+        .message {
+            margin-bottom: 10px;
+            padding: 10px;
+            background-color: #f9f9f9;
+            border-left: 3px solid #337ab7;
+            border-radius: 3px;
+        }
+
+        .message strong {
+            display: block;
+            color: #337ab7;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        form input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+        }
+
+        form button {
+            padding: 10px 20px;
+            background-color: #5cb85c;
+            color: #fff;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        form button:hover {
+            background-color: #4cae4c;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="navbar">
+        <h1>Bate-Papinho</h1>
+        <ul>
+            <li><a href="/logout">Logout</a></li>
+            <li><a href="/v1/chat">Sala de Bate-Papo</a></li>
+            <li><a href="/v1/register/index">Listar Usuários</a></li>
+            <li><a href="/v1/new-register">Cadastrar Usuário</a></li>
+        </ul>
+    </div>
+    <div class="container">
+        <h1 style="color: #d9534f;">Chat</h1>
+        <p>Bem Vindo<%= apelido %>! </p>
+        <div class="messages">
+            <h2>Messages</h2>
+            <% messages.forEach(message=> { %>
+                <div class="message">
+                    <strong>
+                        <%= message.apelido %>:
+                    </strong>
+                    <%= message.message %>
+                        <br><br>
+                        Enviada em: <%= message.created_at %>
+                </div>
+                <% }) %>
+                    <form action="/v1/sendmessage" method="POST">
+                        <input type="text" name="message" placeholder="Message" required>
+                        <button type="submit">Enviar</button>
+                    </form>
+                    <a href="/logout" class="btn-logout">Logout</a>
+        </div>
+
+</body>
+
+</html>

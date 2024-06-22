@@ -1,117 +1,96 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const checkAuth = require('../utils/checkAuth');
+
 const router = express.Router();
 
-var interessados = [];
-var pets = [];
+
+var db = require('./db');
+
+var getUser = db.getUser();
+var getMsg = db.getMessage();
+
 
 function isValid(data_create) {
-    if(data_create == ''){
+    if (data_create == '') {
         return false;
     }
-    else{
+    else {
         return true;
     }
 };
 
 router.use(bodyParser.urlencoded({ extended: true }));
 
-//Pet routes
-router.get('/pet', checkAuth, (req, res) => {
-    res.status(200).render('../views/Private/petList.ejs', { data: pets });
+//User routes
+router.get('/logout', (req, res) => {
+    req.session.destroy();
+    res.redirect('/login');
 });
 
-router.post('/pet', checkAuth, (req, res) => {
-    if(isValid(req.body.name)){
-        var data_create = {
+router.get('/register/index', checkAuth, (req, res) => {
+    console.log('passou aq')
+    res.status(200).render('../views/Private/index-users.ejs', { users: getUser })
+})
+
+router.get('/new-register', (req, res) => {
+    res.status(200).render('../views/Public/register.ejs');
+});
+
+router.post('/register', (req, res) => {
+    var nome = req.body.name;
+    var email = req.body.email;
+    var data_nascimento = req.body.birthdate;
+    var apelido = req.body.nickname;
+    var password = req.body.password;
+
+    if (isValid(email) && isValid(password) && isValid(nome) && isValid(apelido)) {
+        var new_user = {
             id: crypto.randomUUID(),
-            name: req.body.name,
-            age: req.body.age,
-            description: req.body.description,
-            interesteds: [],
+            name: nome,
+            dn: data_nascimento,
+            apelido: apelido,
+            email: email,
+            password: password,
         };
 
-        pets.push(data_create);
+        getUser.push(new_user);
 
-        console.log(pets);
+        res.send('<script>alert("Cadastrado com sucesso"); window.location.href = "/"; </script>');
+    }
 
-        res.redirect('/register/pet');
+    else {
+        res.send('<script>alert("Dados inválidos");</script>');
     }
-    else{ 
-        res.send('<script>alert("Dados inválidos"); window.location.href = "/register/pet"; </script>');
-    }
+
+})
+
+//Chat routes
+router.get('/chat', checkAuth, (req, res) => {
+    res.status(200).render('../views/Private/chat.ejs', { messages: getMsg, apelido: req.session.user[0].apelido });
 });
 
-//Interested 
-router.get('/interessados', checkAuth, (req, res) => {
-    console.log('passou no GET interessados', interessados)
-    res.status(200).render('../views/Private/Interessados.ejs', { data: interessados });
-});
+router.post('/sendmessage', checkAuth, (req, res) => {
+    var msg = req.body.message
 
-router.post('/interessados', checkAuth, (req, res) => {
-    if(isValid(req.body.name)){
-        let id_data_animal = req.body.id_data;
-
-        if(!id_data_animal){
-            nome_animal = '';
-            id_animal = '';
+    if (isValid(msg)) {
+        var new_message = {
+            id: crypto.randomUUID(),
+            message: msg,
+            apelido: req.session.user[0].apelido,
+            created_at: new Date().toUTCString(),
         }
-        else{
-            let pet_interested = pets.filter(f =>{
-                return f.id == id_data_animal;
-            });
 
-            nome_animal = pet_interested[0].name;
-            id_animal = pet_interested[0].id;
-        };
-   
-        var data_create = {
-            id: crypto.randomUUID(),
-            name: req.body.name,
-            fone: req.body.fone,
-            email: req.body.email,
-            nome_animal: nome_animal,
-            id_animal: id_animal,
-        };
+        getMsg.push(new_message);
 
-        interessados.push(data_create);
-
-        res.status(201).redirect('/register/interessados');
+        res.redirect('/v1/chat');
     }
-    else{
-        res.send('<script>alert("Dados inválidos"); window.location.href = "/register/interessados"; </script>');
+
+    else {
+        res.send('<script>alert("Dados inválidos"); window.location.href = "/v1/chat"; </script>');
     }
 });
 
 
-//Delete methods
 
-router.post('/delete/pet/:id_pet', checkAuth, (req, res)=> {
-    let id_pet = req.params.id_pet;
-
-    var novo_pets = pets.filter(p => {
-        return id_pet != p.id
-    })
-
-    pets = novo_pets;
-
-    res.send('<script>alert("Excluido com sucesso"); window.location.href = "/register/pet"; </script>');
-    
-});
-
-router.post('/delete/interessados/:id_interessados', checkAuth, (req, res)=> {
-    let id_interessados = req.params.id_interessados;
-
-    var novo_interessados = interessados.filter(p => {
-        return id_interessados != p.id
-    })
-
-    interessados = novo_interessados;
-
-    res.send('<script>alert("Excluido com sucesso"); window.location.href = "/register/interessados"; </script>');
-    
-});
-
-
-module.exports = router
+module.exports = router;

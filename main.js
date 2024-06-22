@@ -4,7 +4,7 @@ const port = 3000;
 
 const session = require('express-session');
 const register_create = require('./routes/crud');
-const checkEmail = require('./middleware/checkEmail');
+const checkLogin = require('./middleware/checkLogin');
 const path = require('path');
 
 const checkAuth = require('./utils/checkAuth');
@@ -32,8 +32,8 @@ app.use(express.static(path.join(process.cwd(), 'Public')));
 app.use('/private', checkAuth, express.static(path.join(process.cwd(), 'Private')));
 
 
-app.use('/', checkEmail);
-app.use('/register', register_create);
+app.use('/', checkLogin);
+app.use('/v1', register_create);
 
 
 
